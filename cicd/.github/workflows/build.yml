@@ -1,0 +1,45 @@
+# Name of the GitHub Actions workflow
+name: Build succeeds on PR
+
+# Defines the event that triggers the workflow
+# Triggered when a pull request is opened/updated
+# Runs only if the PR targets these branches
+# Target branch: master, main
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+
+# Defines the list of jobs to run
+# Name of the job
+# Display name for the job (optional but good practice)
+# Specifies the OS environment for the job (Ubuntu latest version)
+jobs:
+  build:
+    name: Build on Project
+    runs-on: ubuntu-latest
+
+    # List of steps that will run in sequence
+    # Checkout the repository's code in the runner
+    # Step name for setting up Node.js environment
+    # Official action to set up Node.js
+    # Configuration for the setup-node action
+    # Specifies Node.js version 20 to use
+    # Step name for installing project dependencies
+    # Runs 'npm install' to install packages from package.json
+    # Step name for the build process
+    # Executes the build script defined in package.json
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
