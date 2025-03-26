@@ -6,5 +6,3 @@
 2. Mitigation abuse(attacks on password or spamming)
 3. Managing traffic
 4. DDOS protection
-
-!["ratelimiter"]("./images/ratelimiter.png")
