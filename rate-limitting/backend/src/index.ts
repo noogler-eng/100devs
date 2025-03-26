@@ -1,19 +1,19 @@
 import express from "express";
 import dotnev from "dotenv";
-// import { rateLimit } from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 import generateOtp from "./utils/getOtp";
 dotnev.config();
 
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000,
-//   limit: 100,
-//   standardHeaders: "draft-8",
-//   legacyHeaders: false,
-// });
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+});
 
 const app = express();
 app.use(express.json());
-// app.use(limiter);
+app.use(limiter);
 
 // in memory database
 const otpStore: Record<string, string> = {};

@@ -40,8 +40,15 @@ const six_number_key_generator = async () => {
         otpVerified = true;
         break;
       }
-    } catch (error) {
-      console.log(`Wrong OTP: ${i}`);
+    } catch (error: any) {
+      if (error.response.status == 400) {
+        console.log(`Wrong OTP`, error.message);
+      } else if (error.response.status == 429) {
+        console.log(`rate limiting`, error.message);
+        return;
+      } else {
+        console.log(error.message);
+      }
     }
   }
 
