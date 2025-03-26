@@ -4,6 +4,8 @@ import { rateLimit } from "express-rate-limit";
 import generateOtp from "./utils/getOtp";
 dotnev.config();
 
+// this rate limiter valid in which in 15 min we can only do 100 req
+// extra request leads to rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 100,
@@ -13,6 +15,7 @@ const limiter = rateLimit({
 
 const app = express();
 app.use(express.json());
+// here rate-limiter will be applied to all the endpoints
 app.use(limiter);
 
 // in memory database
