@@ -2,6 +2,7 @@ import express from "express";
 import dotnev from "dotenv";
 import { rateLimit } from "express-rate-limit";
 import generateOtp from "./utils/getOtp";
+import cors from "cors";
 dotnev.config();
 
 // this rate limiter valid in which in 15 min we can only do 100 req
@@ -14,6 +15,7 @@ const limiter = rateLimit({
 });
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 // here rate-limiter will be applied to all the endpoints
 app.use(limiter);
@@ -50,9 +52,30 @@ app.post("/get-otp", (req, res) => {
 // when user forget password then reseting the password then there
 // will be send otp functionality which will create an otp
 // this is to reset password by conforming is the otp is valid or not
-app.post("/reset-password", (req, res) => {
+app.post("/reset-password", async (req: any, res: any) => {
   try {
-    const { email, otp, new_password } = req.body;
+    const { email, otp, new_password, token } = req.body;
+
+    // this is cloudlfare logic
+    let formData = new FormData();
+    formData.append("secret", process.env.SECRET_KEY!);
+    formData.append("response", token);
+
+    const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+    const result = await fetch(url, {
+      body: formData,
+      method: "POST",
+    });
+    const challengeSucceeded = (await result.json()).success;
+    console.log("challengeSucceeded: ", challengeSucceeded);
+    if (!challengeSucceeded) {
+      return res.status(400).json({
+        msg: "challenge failed",
+      });
+    }
+
+    console.log(email, otp, new_password);
+
     if (!email || !otp || !new_password) {
       res.status(400).json({
         msg: "please enter credentails correctly",
