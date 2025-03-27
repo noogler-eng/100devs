@@ -10,10 +10,27 @@ interface Game {
 }
 [];
 
+// static variables, static methods - directly associated with the class not object
 class GameManager {
+  // now this is associated with the class
   games: Game[];
+  private static instance: GameManager;
 
-  constructor() {
+  // making the constructor private so that no one can call it from outside
+  private constructor() {
+    this.games = [];
+  }
+
+  // static method
+  // doing it on the class not an object
+  static getInstance() {
+    if (GameManager.instance) return GameManager.instance;
+    // if instance is not exist then making new instance and returning
+    GameManager.instance = new GameManager();
+    return GameManager.instance;
+  }
+
+  clear() {
     this.games = [];
   }
 
@@ -61,4 +78,11 @@ class GameManager {
   }
 }
 
-export default GameManager;
+// everyone using the same instance
+export default GameManager.getInstance();
+
+// sngletone pattern menas we can create a single instance of anything
+// we can;t able to create other instances (common pattern)
+// no other one will be able to call the constructor
+// in js and ts -> we use singletons and strategy pattern(also not much used)
+// make the constructor private
