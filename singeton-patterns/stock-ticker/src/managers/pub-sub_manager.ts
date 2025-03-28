@@ -46,6 +46,7 @@ class PubSubManager {
 
   async publishData(data: { channel: string; content: any }) {
     await this.client?.publish(data.channel, JSON.stringify(data.content));
+
   }
 
   async handleMsg(data: { channel: string; msg: any }) {

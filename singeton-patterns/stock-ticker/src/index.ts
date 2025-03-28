@@ -1,19 +1,22 @@
-// redis can act as a pub sub modal
-// subs -> redis
-// pubs -> redis
-// redis -> subs
-
 import PubSubManager from "./managers/pub-sub_manager";
 
 const main = async () => {
   try {
     const instance = await PubSubManager.getInstance();
+
+    // Subscribe to the 'apple' channel
     await instance.userSubscribe({
       channel: "apple",
       userId: "1",
     });
 
-    // Delay before publishing to ensure subscription is active
+    // Additional subscribers for demonstration
+    await instance.userSubscribe({
+      channel: "apple",
+      userId: "2",
+    });
+
+    // First stock price update after 2 seconds
     setTimeout(async () => {
       await instance.publishData({
         channel: "apple",
@@ -26,7 +29,7 @@ const main = async () => {
       });
     }, 2000);
 
-    // Delay before publishing to ensure subscription is active
+    // Second stock price update after 3 seconds
     setTimeout(async () => {
       await instance.publishData({
         channel: "apple",
@@ -39,7 +42,7 @@ const main = async () => {
       });
     }, 3000);
   } catch (error) {
-    console.log("error: ", error);
+    console.error("Error in main function:", error);
   }
 };
 
