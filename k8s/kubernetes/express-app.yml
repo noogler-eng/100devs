@@ -1,0 +1,58 @@
+# Defining the API Version and Kind
+# Deployment resource.
+apiVersion: apps/v1
+kind: Deployment
+# This section contains metadata about the Deployment.
+# name of the Deployment
+metadata:
+  name: my-k8s-testing
+# Defining the Desired Number of Pods
+#  Specifies that only 1 Pod should be running at 
+# all times. If the Pod crashes, Kubernetes will 
+# restart it automatically.
+spec:
+  replicas: 1
+  # selector: This tells Kubernetes which Pods belong to this Deployment.
+  # matchLabels: Selects Pods that have the label app: k8s-test-backend.
+  selector:
+    matchLabels:
+      app: k8s-test-backend
+  template:
+    metadata:
+      labels:
+        app: k8s-test-backend
+    spec:
+      containers:
+        - name: k8s-test-backend
+          image: 10xsharad/k8s-test
+          ports:
+            - containerPort: 4000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  # here in name there is configMap name will come
+                  name: 10xsharad-k8s-test-config
+                  key: database_url
+            - name: CACHE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: 10xsharad-k8s-test-config
+                  key: cache_size
+            - name: PAYMENT_GATEWAY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: 10xsharad-k8s-test-config
+                  key: payment_gateway_url
+            - name: MAX_CART_ITEMS
+              valueFrom:
+                configMapKeyRef:
+                  name: 10xsharad-k8s-test-config
+                  key: max_cart_items
+            - name: SESSION_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: 10xsharad-k8s-test-config
+                  key: session_timeout
+
+# kubectl apply -f express-app.yml

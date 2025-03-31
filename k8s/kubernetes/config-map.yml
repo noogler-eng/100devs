@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # here / is not allowed in nameing of the configMap
+  name: 10xsharad-k8s-test-config
+data:
+  database_url: "mysql://ecom-db:3306/shop"
+  cache_size: "1000"
+  payment_gateway_url: "https://payment-gateway.example.com"
+  max_cart_items: "50"
+  session_timeout: "3600"
+
+# kubectl apply -f config-map.yml  
+# kubectl describe configmap 10xsharad-k8s-test-config                  

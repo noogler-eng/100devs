@@ -1,0 +1,26 @@
+# This specifies the API version for the Kubernetes Service.
+apiVersion: v1
+# This tells Kubernetes that you are defining a Service resource.
+kind: Service
+# Contains metadata about the Service.
+# The name of the Service in Kubernetes.
+# This name is used for internal communication within the cluster.
+metadata:
+  name: my-express-app-service
+# This section defines the Service’s specifications.
+spec:
+# The Service is of type NodePort, which means
+  type: NodePort
+# Selects the Pods that this Service will send traffic to.
+  selector:
+    app: k8s-test-backend
+  ports:
+# The port that the Service exposes inside the cluster
+    - port: 4000
+# The port on the Pod where the application is running
+      targetPort: 4000
+# The port exposed on every Kubernetes node, allowing external access.
+      nodePort: 30007
+
+# kubectl apply -f express-service.yml
+
