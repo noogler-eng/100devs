@@ -13,3 +13,4 @@ nodes:
 
 # kind create cluster --config cluster.yml --name local
 # kubectl get nodes
+# kind delete cluster --name <cluster-name>
